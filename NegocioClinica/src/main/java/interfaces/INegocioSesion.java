@@ -6,10 +6,8 @@ package interfaces;
 
 /**
  *
- * @author natsu
+ * @author 
  */
-public interface INegocio {
-    
-    public String getObject();
-    
+public interface INegocioSesion {
+    public String registrarSesion(String json);
 }

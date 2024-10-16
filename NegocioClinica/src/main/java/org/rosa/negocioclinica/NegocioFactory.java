@@ -4,7 +4,9 @@
  */
 package org.rosa.negocioclinica;
 
-import interfaces.INegocio;
+import interfaces.INegocioExpediente;
+import interfaces.INegocioSesion;
+import interfaces.INegocioPaciente;
 
 /**
  *
@@ -12,8 +14,17 @@ import interfaces.INegocio;
  */
 public class NegocioFactory {
     
-    public static INegocio createInstance() {
-        return new Negocio();
+    public static INegocioPaciente createInstancePaciente() {
+        return new NegocioPaciente();
+    }
+    
+    public static INegocioExpediente createInstanceExpediente(){
+        return new NegocioExpediente();
+    }
+    
+    public static INegocioSesion createInstanceSesion(){
+        return new NegocioSesion();
     }
     
 }
+

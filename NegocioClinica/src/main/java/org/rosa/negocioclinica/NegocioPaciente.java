@@ -4,16 +4,16 @@
  */
 package org.rosa.negocioclinica;
 
-import interfaces.INegocio;
+import interfaces.INegocioPaciente;
 
 /**
  *
  * @author natsu
  */
-class Negocio implements INegocio {
+class NegocioPaciente implements INegocioPaciente {
 
     @Override
-    public String getObject() {
+    public String buscarPacienteSiguiente() {
         return "{rosa: 1}";
     }
     
