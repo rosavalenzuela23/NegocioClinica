@@ -4,16 +4,12 @@
  */
 package org.rosa.negocioclinica;
 
-import DTOEntidades.DTODiagnostico;
 import DTOEntidades.DTOExpediente;
-import DTOEntidades.DTOPaciente;
 import com.google.gson.Gson;
 import interfaces.INegocioExpediente;
 import java.util.LinkedList;
 import java.util.List;
-import org.marcos.Entidades.EstadoCivil;
 import org.marcos.Entidades.Expediente;
-import org.marcos.Entidades.TipoVivienda;
 import org.marcos.datosclinica.ExpedienteDAO;
 
 /**
@@ -27,19 +23,7 @@ public class NegocioExpediente implements INegocioExpediente {
         List<DTOExpediente> dtoexpedientes = new LinkedList();
         
         for (var expediente : expedientes) {
-            var dto = new DTOExpediente(expediente.getId(),
-                    expediente.getEnfermedadPrevia(),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    expediente.getMotivoConsulta(), 
-                new DTOPaciente(expediente.getPaciente().getId(), null, null, null, expediente.getPaciente().getNombre(), null,
-                        null, null, null, null, null, null),
-                    null
-            );
-            dtoexpedientes.add(dto);
+            dtoexpedientes.add(DTOExpediente.from(expediente));
         }
 
         return dtoexpedientes;
