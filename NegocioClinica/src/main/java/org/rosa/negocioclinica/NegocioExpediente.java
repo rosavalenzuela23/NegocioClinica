@@ -44,7 +44,10 @@ public class NegocioExpediente implements INegocioExpediente {
     @Override
     public String registrarExpediente(String json) {
 
-        Gson gson = new Gson();
+        var gsonBuilder = new GsonBuilder();
+        gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm:ss:sssZ");
+        
+        Gson gson = gsonBuilder.create();
         Expediente expediente = gson.fromJson(json, Expediente.class);
         ExpedienteDAO expedienteDao = new ExpedienteDAO();
 
