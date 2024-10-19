@@ -6,6 +6,7 @@ package org.rosa.negocioclinica;
 
 import DTOEntidades.DTOExpediente;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import interfaces.INegocioExpediente;
 import java.util.LinkedList;
 import java.util.List;
@@ -18,6 +19,15 @@ import org.marcos.datosclinica.ExpedienteDAO;
  */
 public class NegocioExpediente implements INegocioExpediente {
 
+    private final Gson parser;
+    
+    public NegocioExpediente() {
+        super();
+        var gsonBuilder = new GsonBuilder();
+        gsonBuilder.setDateFormat("yyyy-MM-dd HH:ss:mm.sssZ");
+        parser = gsonBuilder.create();
+    }
+    
     private List<DTOExpediente> toDtoExpedientes(List<Expediente> expedientes) {
         
         List<DTOExpediente> dtoexpedientes = new LinkedList();
@@ -55,4 +65,12 @@ public class NegocioExpediente implements INegocioExpediente {
 
     }
 
+    public String obtenerExpedientePorPacienteId(Long idPaciente) {
+        var expedienteDao = new ExpedienteDAO();
+        
+        var expediente = expedienteDao.obtenerExpediente(idPaciente);
+        
+        return parser.toJson(DTOExpediente.from(expediente));
+    }
+    
 }
