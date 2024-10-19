@@ -6,11 +6,13 @@ package org.rosa.negocioclinica;
 
 import DTOEntidades.DTOSesion;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import interfaces.INegocioSesion;
 import org.marcos.Entidades.ComentarioSesion;
 import org.marcos.Entidades.Problema;
 import org.marcos.Entidades.Sesion;
 import org.marcos.datosclinica.SesionDAO;
+import org.rosa.negocioclinica.util.GsonFactory;
 
 /**
  *
@@ -18,17 +20,26 @@ import org.marcos.datosclinica.SesionDAO;
  */
 public class NegocioSesion implements INegocioSesion{
 
+    private final Gson gson;
+    
+    public NegocioSesion() {
+        super();
+        this.gson = GsonFactory.createInstance();
+    }
+    
     @Override
     public String registrarSesion(String json) {
-        Gson gson = new Gson();
+        
         Sesion sesion = gson.fromJson(json, Sesion.class);
         
         for (ComentarioSesion comentario : sesion.getComentarios()) {
             comentario.setSesion(sesion);
         }
+        
         for (Problema problema : sesion.getProblemasSesion()) {
             problema.setSesion(sesion);
         }
+        
         SesionDAO sesionDao = new SesionDAO();
         Sesion response = sesionDao.agregarSesion(sesion);
         DTOSesion dtoResponse =  DTOSesion.from(response);

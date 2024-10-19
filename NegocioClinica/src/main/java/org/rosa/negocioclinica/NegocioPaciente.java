@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import org.marcos.Entidades.Paciente;
 import org.marcos.datosclinica.PacienteDAO;
+import org.rosa.negocioclinica.util.GsonFactory;
 
 /**
  *
@@ -18,6 +19,13 @@ import org.marcos.datosclinica.PacienteDAO;
  */
 public class NegocioPaciente implements INegocioPaciente {
 
+    private final Gson gson;
+    
+    public NegocioPaciente() {
+        super();
+        this.gson = GsonFactory.createInstance();
+    }
+    
     private List<DTOPaciente> listToDto(List<Paciente> pacientes) {
         var list = new LinkedList<DTOPaciente>();
         for (Paciente p : pacientes) {
@@ -36,8 +44,6 @@ public class NegocioPaciente implements INegocioPaciente {
 
         var pacienteDao = new PacienteDAO();
         List<Paciente> pacientes = pacienteDao.obtenerPacientesDelPsicologo(id);
-        
-        var gson = new Gson();
         
         return gson.toJson(listToDto(pacientes));
     }

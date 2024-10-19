@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 import org.marcos.Entidades.Expediente;
 import org.marcos.datosclinica.ExpedienteDAO;
+import org.rosa.negocioclinica.util.GsonFactory;
 
 /**
  *
@@ -23,9 +24,7 @@ public class NegocioExpediente implements INegocioExpediente {
     
     public NegocioExpediente() {
         super();
-        var gsonBuilder = new GsonBuilder();
-        gsonBuilder.setDateFormat("yyyy-MM-dd HH:ss:mm.sssZ");
-        parser = gsonBuilder.create();
+        parser = GsonFactory.createInstance();
     }
     
     private List<DTOExpediente> toDtoExpedientes(List<Expediente> expedientes) {
@@ -45,26 +44,21 @@ public class NegocioExpediente implements INegocioExpediente {
         ExpedienteDAO expedienteDao = new ExpedienteDAO();
         List<Expediente> expedientes = expedienteDao.buscarExpedientesAbiertos(idPsicologo);
         
-        Gson gson = new Gson();
-        String response = gson.toJson(toDtoExpedientes(expedientes));
+        String response = parser.toJson(toDtoExpedientes(expedientes));
 
         return response;
     }
 
     @Override
     public String registrarExpediente(String json) {
-
-        var gsonBuilder = new GsonBuilder();
-        gsonBuilder.setDateFormat("yyyy-MM-dd HH:mm:ss:sssZ");
-        
-        Gson gson = gsonBuilder.create();
-        Expediente expediente = gson.fromJson(json, Expediente.class);
+        Expediente expediente = parser.fromJson(json, Expediente.class);
         ExpedienteDAO expedienteDao = new ExpedienteDAO();
 
-        return gson.toJson(expedienteDao.registrarExpediente(expediente));
+        return parser.toJson(expedienteDao.registrarExpediente(expediente));
 
     }
 
+    @Override
     public String obtenerExpedientePorPacienteId(Long idPaciente) {
         var expedienteDao = new ExpedienteDAO();
         
