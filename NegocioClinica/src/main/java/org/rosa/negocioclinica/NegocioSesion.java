@@ -4,11 +4,15 @@
  */
 package org.rosa.negocioclinica;
 
+import DTOEntidades.DTOPaciente;
 import DTOEntidades.DTOSesion;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import interfaces.INegocioSesion;
+import java.util.LinkedList;
+import java.util.List;
 import org.marcos.Entidades.ComentarioSesion;
+import org.marcos.Entidades.Paciente;
 import org.marcos.Entidades.Problema;
 import org.marcos.Entidades.Sesion;
 import org.marcos.datosclinica.SesionDAO;
@@ -25,6 +29,14 @@ public class NegocioSesion implements INegocioSesion{
     public NegocioSesion() {
         super();
         this.gson = GsonFactory.createInstance();
+    }
+    
+    private List<DTOSesion> listToDto(List<Sesion> sesiones) {
+        var list = new LinkedList<DTOSesion>();
+        for (Sesion s : sesiones) {
+            list.add(DTOSesion.from(s));
+        }
+        return list;
     }
     
     @Override
@@ -46,4 +58,11 @@ public class NegocioSesion implements INegocioSesion{
         return gson.toJson(dtoResponse);
     }
     
+    @Override
+    public String obtenerSesionesExpediente(Long expedienteId){
+        
+        var sesionDao = new SesionDAO();
+        List<Sesion> sesiones =  sesionDao.obtenerSesiones(expedienteId);
+        return gson.toJson(listToDto(sesiones));
+    }
 }

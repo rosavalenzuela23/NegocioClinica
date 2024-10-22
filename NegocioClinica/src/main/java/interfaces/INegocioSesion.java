@@ -10,4 +10,5 @@ package interfaces;
  */
 public interface INegocioSesion {
     public String registrarSesion(String json);
+    public String obtenerSesionesExpediente(Long expedienteId);
 }
