@@ -4,15 +4,12 @@
  */
 package org.rosa.negocioclinica;
 
-import DTOEntidades.DTOPaciente;
 import DTOEntidades.DTOSesion;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import interfaces.INegocioSesion;
 import java.util.LinkedList;
 import java.util.List;
 import org.marcos.Entidades.ComentarioSesion;
-import org.marcos.Entidades.Paciente;
 import org.marcos.Entidades.Problema;
 import org.marcos.Entidades.Sesion;
 import org.marcos.datosclinica.SesionDAO;

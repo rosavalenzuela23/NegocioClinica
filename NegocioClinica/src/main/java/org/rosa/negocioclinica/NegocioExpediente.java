@@ -5,13 +5,19 @@
 package org.rosa.negocioclinica;
 
 import DTOEntidades.DTOExpediente;
+import DTOEntidades.DTOPaciente;
+import DTOEntidades.DTORegistroExpediente;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import interfaces.INegocioExpediente;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import org.marcos.Entidades.Expediente;
+import org.marcos.Entidades.IntegranteHogar;
+import org.marcos.Entidades.Paciente;
+import org.marcos.Entidades.Psicologo;
 import org.marcos.datosclinica.ExpedienteDAO;
+import org.marcos.datosclinica.PacienteDAO;
 import org.rosa.negocioclinica.util.GsonFactory;
 
 /**
@@ -21,16 +27,16 @@ import org.rosa.negocioclinica.util.GsonFactory;
 public class NegocioExpediente implements INegocioExpediente {
 
     private final Gson parser;
-    
+
     public NegocioExpediente() {
         super();
         parser = GsonFactory.createInstance();
     }
-    
+
     private List<DTOExpediente> toDtoExpedientes(List<Expediente> expedientes) {
-        
+
         List<DTOExpediente> dtoexpedientes = new LinkedList();
-        
+
         for (var expediente : expedientes) {
             dtoexpedientes.add(DTOExpediente.from(expediente));
         }
@@ -43,7 +49,7 @@ public class NegocioExpediente implements INegocioExpediente {
 
         ExpedienteDAO expedienteDao = new ExpedienteDAO();
         List<Expediente> expedientes = expedienteDao.buscarExpedientesAbiertos(idPsicologo);
-        
+
         String response = parser.toJson(toDtoExpedientes(expedientes));
 
         return response;
@@ -51,20 +57,50 @@ public class NegocioExpediente implements INegocioExpediente {
 
     @Override
     public String registrarExpediente(String json) {
-        Expediente expediente = parser.fromJson(json, Expediente.class);
-        ExpedienteDAO expedienteDao = new ExpedienteDAO();
+        DTORegistroExpediente registroExpediente = parser.fromJson(json, DTORegistroExpediente.class);
 
-        return parser.toJson(expedienteDao.registrarExpediente(expediente));
+        var list = new ArrayList<Psicologo>();
+        var listPaciente = new ArrayList<Paciente>();
+        list.add(registroExpediente.getPsicologo());
+        listPaciente.add(registroExpediente.getPaciente());
 
+        Paciente paciente = registroExpediente.getPaciente();
+
+        paciente.setPsicologos(list);
+
+        paciente.setExpediente(registroExpediente.getExpediente());
+        registroExpediente.getExpediente().setPaciente(paciente);
+        registroExpediente.getPsicologo().setPacientes(listPaciente);
+
+        var expediente = registroExpediente.getExpediente();
+
+        if (expediente.getIntegranteHogar() != null) {
+            for (var integranteHogar : registroExpediente.getExpediente().getIntegranteHogar()) {
+                integranteHogar.setExpediente(registroExpediente.getExpediente());
+            }
+        }
+
+        if (expediente.getFamiliaresConfianza() != null) {
+            for (var familiarConfianza : registroExpediente.getExpediente().getFamiliaresConfianza()) {
+                familiarConfianza.setExpediente(registroExpediente.getExpediente());
+            }
+        }
+
+        PacienteDAO pacientedao = new PacienteDAO();
+
+//        System.out.println(paciente.toString());
+        pacientedao.guardar(paciente);
+
+        return parser.toJson(DTOPaciente.from(paciente));
     }
 
     @Override
     public String obtenerExpedientePorPacienteId(Long idPaciente) {
         var expedienteDao = new ExpedienteDAO();
-        
-        var expediente = expedienteDao.obtenerExpediente(idPaciente);
-        
+
+        var expediente = expedienteDao.obtenerExpedientePorIdPaciente(idPaciente);
+
         return parser.toJson(DTOExpediente.from(expediente));
     }
-    
+
 }
