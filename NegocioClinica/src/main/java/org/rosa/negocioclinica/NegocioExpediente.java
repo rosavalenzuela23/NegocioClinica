@@ -7,6 +7,7 @@ package org.rosa.negocioclinica;
 import DTOEntidades.DTOExpediente;
 import DTOEntidades.DTOPaciente;
 import DTOEntidades.DTORegistroExpediente;
+import DTOEntidades.DtoPacienteExpediente;
 import com.google.gson.Gson;
 import interfaces.INegocioExpediente;
 import java.util.ArrayList;
@@ -91,7 +92,7 @@ public class NegocioExpediente implements INegocioExpediente {
 //        System.out.println(paciente.toString());
         pacientedao.guardar(paciente);
 
-        return parser.toJson(DTOPaciente.from(paciente));
+        return parser.toJson(DTOExpediente.from(paciente.getExpediente()));
     }
 
     @Override
@@ -101,6 +102,21 @@ public class NegocioExpediente implements INegocioExpediente {
         var expediente = expedienteDao.obtenerExpedientePorIdPaciente(idPaciente);
 
         return parser.toJson(DTOExpediente.from(expediente));
+    }
+
+    @Override
+    public String actualizarExpediente(String json) {
+        Gson g = GsonFactory.createInstance();
+        
+        var dtoexpedientePaciente = g.fromJson(json, DtoPacienteExpediente.class);
+        
+        var expedienteDao = new ExpedienteDAO();
+        var pacienteDao = new PacienteDAO();
+        
+        expedienteDao.actualizarExpediente(dtoexpedientePaciente.getExpediente());
+        pacienteDao.actualizarPaciente(dtoexpedientePaciente.getPaciente());
+        
+        return "{}";
     }
 
 }

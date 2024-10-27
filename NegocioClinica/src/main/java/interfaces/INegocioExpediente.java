@@ -12,4 +12,5 @@ public interface INegocioExpediente {
      public String buscarExpedientes(Long idPsicologo);
      public String registrarExpediente(String json);
      public String obtenerExpedientePorPacienteId(Long idPaciente);
+     public String actualizarExpediente(String json);
 }
