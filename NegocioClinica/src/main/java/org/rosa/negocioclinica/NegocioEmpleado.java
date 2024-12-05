@@ -8,6 +8,8 @@ import interfaces.INegocioEmpleado;
 import org.marcos.datosclinica.EmpleadoDAO;
 import DTOEntidades.DTOEmpleadoLogIn;
 import DTOEntidades.DTOEmpleado;
+import java.util.ArrayList;
+import java.util.List;
 import org.marcos.Entidades.Empleado;
 
 /**
@@ -33,5 +35,41 @@ public class NegocioEmpleado implements INegocioEmpleado{
         }
         
     }
+
+    @Override
+    public String obtenerEmpleados() {
+        
+        Gson gson = new Gson();
+        EmpleadoDAO empdao = new EmpleadoDAO();
+        
+        List<Empleado> empleados = empdao.obtenerEmpleados();
+        
+        List<DTOEmpleado> empleadosConRol = new ArrayList<>();
+        
+        for (Empleado empleado : empleados) {
+            empleadosConRol.add(DTOEmpleado.from(empleado));
+        }
+        
+        String response = gson.toJson(empleadosConRol);
+        
+        return response;
+    }
+
+    @Override
+    public String eliminarEmpleado(String json) {
+        Gson gson = new Gson();
+        
+        DTOEmpleado empleadoBaja = gson.fromJson(json, DTOEmpleado.class);
+        
+        Empleado empleadoEliminado = new Empleado();
+        empleadoEliminado.setId(empleadoBaja.getId());
+        
+        
+        EmpleadoDAO edao = new EmpleadoDAO();
+        String response = gson.toJson(edao.eliminarEmpleado(empleadoEliminado.getId()));
+        return response;
+    }
+
+    
     
 }

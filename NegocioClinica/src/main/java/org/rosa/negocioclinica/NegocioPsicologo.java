@@ -6,6 +6,8 @@ package org.rosa.negocioclinica;
 import com.google.gson.Gson;
 import interfaces.INegocioPsicologo;
 import DTOEntidades.DTOEmpleadoLogIn;
+import DTOEntidades.DTOEmpleado;
+import org.marcos.Entidades.Empleado;
 import org.marcos.Entidades.Psicologo;
 import org.marcos.datosclinica.PsicologoDAO;
 /**
@@ -23,9 +25,27 @@ public class NegocioPsicologo implements INegocioPsicologo {
         Psicologo nuevoPsicologo = new Psicologo();
         nuevoPsicologo.setUsuario(dtoEmpleado.getUsuario());
         nuevoPsicologo.setContrasenia(dtoEmpleado.getPassword());
+        nuevoPsicologo.setEstado(true);
         
         PsicologoDAO pdao = new PsicologoDAO();
         String response = gson.toJson(pdao.registrarPsicologo(nuevoPsicologo));
+        return response;
+    }
+
+    @Override
+    public String actualizarPsicologo(String json) {
+        Gson gson = new Gson();
+        
+        DTOEmpleado empleadoActualizado = gson.fromJson(json, DTOEmpleado.class);
+        
+        Psicologo psicologoActualizado = new Psicologo();
+        psicologoActualizado.setId(empleadoActualizado.getId());
+        psicologoActualizado.setUsuario(empleadoActualizado.getUsuario());
+        psicologoActualizado.setContrasenia(empleadoActualizado.getPassword());
+        psicologoActualizado.setEstado(true);
+        
+        PsicologoDAO pdao = new PsicologoDAO();
+        String response = gson.toJson(pdao.actualizarPsicologo(psicologoActualizado));
         return response;
     }
     

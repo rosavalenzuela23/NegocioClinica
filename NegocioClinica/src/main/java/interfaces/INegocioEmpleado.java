@@ -10,4 +10,6 @@ package interfaces;
  */
 public interface INegocioEmpleado {
     public String obtenerEmpleado(String json)throws Exception;
+    public String obtenerEmpleados();
+    public String eliminarEmpleado(String json);
 }

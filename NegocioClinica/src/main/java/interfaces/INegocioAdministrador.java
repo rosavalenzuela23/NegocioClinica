@@ -10,4 +10,5 @@ package interfaces;
  */
 public interface INegocioAdministrador {
     public String registrarAdministrador(String json);
+    public String actualizarAdministrador(String json);
 }
