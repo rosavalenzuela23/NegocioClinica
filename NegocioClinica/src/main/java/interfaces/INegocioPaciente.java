@@ -12,5 +12,7 @@ public interface INegocioPaciente {
     
     public String buscarPacienteSiguiente();
     public String getPacientesPsicologo(Long id);
+    public void agregarCartaConcentimiento(String paciente, byte[] carta);
+    public String obtenerPacientesSinCarta();
     
 }
