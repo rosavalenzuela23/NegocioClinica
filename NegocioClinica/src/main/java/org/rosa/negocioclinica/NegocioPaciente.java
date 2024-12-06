@@ -8,6 +8,7 @@ import DTOEntidades.DTOPaciente;
 import com.google.gson.Gson;
 import interfaces.INegocioPaciente;
 import java.io.File;
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import org.marcos.Entidades.CartaConcentimiento;
@@ -15,7 +16,6 @@ import org.marcos.Entidades.Paciente;
 import org.marcos.datos.interfaces.IDatosCartaConsentimiento;
 import org.marcos.datos.interfaces.IDatosPaciente;
 import org.marcos.datosclinica.CartaConsentimientoDAO;
-import org.marcos.datosclinica.DatosClinica;
 import org.marcos.datosclinica.PacienteDAO;
 import org.rosa.negocioclinica.util.GsonFactory;
 
@@ -61,7 +61,7 @@ public class NegocioPaciente implements INegocioPaciente {
         IDatosCartaConsentimiento dao = new CartaConsentimientoDAO();
         
         var cartaConcentimiento = new CartaConcentimiento();
-        cartaConcentimiento.setRutaArchivo("."+File.separator+"expedientes"+File.separator+"archivo.pdf");
+        cartaConcentimiento.setRutaArchivo("."+File.separator+"expedientes"+File.separator+p.getId()+".pdf");
         
         try {
             dao.guardar(p, cartaConcentimiento, carta);
