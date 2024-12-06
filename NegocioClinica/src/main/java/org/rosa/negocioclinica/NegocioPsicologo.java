@@ -7,9 +7,11 @@ import com.google.gson.Gson;
 import interfaces.INegocioPsicologo;
 import DTOEntidades.DTOEmpleadoLogIn;
 import DTOEntidades.DTOEmpleado;
-import org.marcos.Entidades.Empleado;
+import java.util.LinkedList;
+import java.util.List;
 import org.marcos.Entidades.Psicologo;
 import org.marcos.datosclinica.PsicologoDAO;
+import org.rosa.negocioclinica.util.GsonFactory;
 /**
  *
  * @author 
@@ -47,6 +49,21 @@ public class NegocioPsicologo implements INegocioPsicologo {
         PsicologoDAO pdao = new PsicologoDAO();
         String response = gson.toJson(pdao.actualizarPsicologo(psicologoActualizado));
         return response;
+    }
+    
+    public String obtenerTodos() {
+        var gson = GsonFactory.createInstance();
+        
+        var dao = new PsicologoDAO();
+        List<Psicologo> psicologos = dao.obtenerTodos();
+        
+        List<DTOEmpleado> empleados = new LinkedList();
+        
+        for (Psicologo p : psicologos) {
+            empleados.add(DTOEmpleado.from(p));
+        }
+        
+        return gson.toJson(empleados.toArray());
     }
     
 }

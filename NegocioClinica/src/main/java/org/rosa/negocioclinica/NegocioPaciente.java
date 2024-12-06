@@ -13,7 +13,9 @@ import java.util.List;
 import org.marcos.Entidades.CartaConcentimiento;
 import org.marcos.Entidades.Paciente;
 import org.marcos.datos.interfaces.IDatosCartaConsentimiento;
+import org.marcos.datos.interfaces.IDatosPaciente;
 import org.marcos.datosclinica.CartaConsentimientoDAO;
+import org.marcos.datosclinica.DatosClinica;
 import org.marcos.datosclinica.PacienteDAO;
 import org.rosa.negocioclinica.util.GsonFactory;
 
@@ -82,6 +84,20 @@ public class NegocioPaciente implements INegocioPaciente {
         }
         
         return gson.toJson(pacientes.toArray());
+    }
+
+    @Override
+    public String obtenerTodos() {
+
+        IDatosPaciente dao = new PacienteDAO();
+        List<Paciente> pacientes = dao.obtenerTodos();
+        
+        List<DTOPaciente> pacientesDto = new LinkedList();
+        for (Paciente p : pacientes) {
+            pacientesDto.add(DTOPaciente.from(p));
+        }
+        
+        return this.gson.toJson(pacientesDto);
     }
     
 }

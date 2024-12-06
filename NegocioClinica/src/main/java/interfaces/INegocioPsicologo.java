@@ -11,4 +11,5 @@ package interfaces;
 public interface INegocioPsicologo {
     public String registrarPsicologo(String json);
     public String actualizarPsicologo(String json);
+    public String obtenerTodos();
 }
